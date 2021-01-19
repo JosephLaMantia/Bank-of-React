@@ -16,6 +16,7 @@ class App extends Component {
       currentUser: {
         userName: "bob_loblaw",
         memberSince: "08/23/99",
+        debitInfo: [],
         debitAmount: 0,
         creditAmount: 0,
       },
@@ -34,9 +35,11 @@ class App extends Component {
           //iterates through all debits
           let tempInfo = [data[i].description, data[i].amount, data[i].date]; //for each debit, create an array storing its data.
           this.setState({
+            debitInfo: [...tempInfo],
             accountBalance: this.state.accountBalance - data[i].amount, //actually debits account balance
             debitAmount: this.state.debitAmount + data[i].amount, //adds up all debits
           });
+          console.log(this.state.debitInfo)
         }
       })
       .catch((error) => console.log("Loading debits error" + error));
