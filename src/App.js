@@ -87,6 +87,7 @@ class App extends Component {
     );
     const DebitsComponent = () => (
       <Debits
+        accountBalance = {this.state.accountBalance}
         data = {this.state.debitInfo}
         />
     );

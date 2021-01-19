@@ -1,10 +1,14 @@
 import React, { Component } from "react";
+import AccountBalance from "./AccountBalance";
 import { Link } from "react-router-dom";
 
 class Debits extends Component {
   render() {
     return (
         <div>
+            <AccountBalance accountBalance={this.props.accountBalance}/>
+
+
             <h1>Debits</h1>
             <table>
                 <tr>
