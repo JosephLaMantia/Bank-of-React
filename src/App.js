@@ -4,6 +4,7 @@ import Home from './components/Home';
 import UserProfile from './components/UserProfile';
 import Nav from './components/Nav';
 import LogIn from './components/Login'
+import axios from 'axios';
 
 class App extends Component {
 
@@ -15,9 +16,42 @@ class App extends Component {
       currentUser: {
         userName: 'bob_loblaw',
         memberSince: '08/23/99',
+        debitAmount: 0,
+        creditAmount: 0
       }
     }
   }
+
+  componentDidMount = () => { console.log("In componentDidMount");
+
+  // Load in credits:
+    axios.get("https://moj-api.herokuapp.com/debits")
+      .then((res) => {
+        let data = res.data;
+        for (let i = 0; i < data.length; i++){  //iterates through all debits
+          let tempInfo = [data[i].description, data[i].amount, data[i].date]; //for each debit, create an array storing its data.
+          this.setState({
+            accountBalance: this.state.accountBalance - data[i].amount, //actually debits account balance
+            debitAmount: this.state.debitAmount + data[i].amount  //adds up all debits
+          });
+        }
+      })
+      .catch((error) => console.log("Loading debits error" + error));
+
+    // Load in debits:
+  axios.get("https://moj-api.herokuapp.com/credits")
+  .then((res) => {
+    let data = res.data;
+    for (let i = 0; i < data.length; i++){  //iterates through all credits
+      let tempInfo = [data[i].description, data[i].amount, data[i].date]; //for each credit, create an array storing its data.
+      this.setState({
+        accountBalance: this.state.accountBalance + data[i].amount, //actually credits account balance
+        creditAmount: this.state.creditAmount + data[i].amount  //adds up all credits
+      });
+    }
+  })
+  .catch((error) => console.log("Loading credits error: " + error));
+}
 
 
   mockLogIn = (logInInfo) => {
@@ -45,7 +79,6 @@ class App extends Component {
         </Router>
     );
   }
-
 }
 
 export default App;
