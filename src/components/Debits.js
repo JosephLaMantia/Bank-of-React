@@ -5,7 +5,7 @@ class Debits extends Component {
   render() {
     return (
         <div>
-          
+          <h1>Debits</h1>
         </div>
     );
   }

@@ -4,6 +4,7 @@ import Home from "./components/Home";
 import UserProfile from "./components/UserProfile";
 import Nav from "./components/Nav";
 import LogIn from "./components/Login";
+import Debits from "./components/Debits";
 import axios from "axios";
 
 class App extends Component {
@@ -80,6 +81,9 @@ class App extends Component {
         {...this.props}
       />
     );
+    const DebitsComponent = () => (
+      <Debits/>
+    );
 
     return (
       <Router>
@@ -88,6 +92,7 @@ class App extends Component {
           <Route exact path="/" render={HomeComponent} />
           <Route exact path="/userProfile" render={UserProfileComponent} />
           <Route exact path="/login" render={LogInComponent} />
+          <Route exact path="/debits" render={DebitsComponent} />
         </div>
       </Router>
     );
