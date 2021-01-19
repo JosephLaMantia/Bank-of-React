@@ -16,51 +16,72 @@ class App extends Component {
       currentUser: {
         userName: "bob_loblaw",
         memberSince: "08/23/99",
-        debitInfo: [],
-        debitAmount: 0,
-        creditInfo: [],
-        creditAmount: 0,
       },
+      debitInfo: [],
+      debitAmount: 0,
+      creditInfo: [],
+      creditAmount: 0,
     };
+    this.updateDebit = this.updateDebit.bind(this);
+    this.updateCredit = this.updateCredit.bind(this);
   }
 
   componentDidMount = () => {
     console.log("In componentDidMount");
 
-    // Load in credits: 
+    //Set up a counter for debits and credits
+    let debits = 0;
+    let credits = 0;
+
+    // fetch debits:
+    console.log("fetch debits:");
     axios
       .get("https://moj-api.herokuapp.com/debits")
       .then((res) => {
-        let data = res.data;
-        this.setState({debitInfo: data}); //Sets debitInfo to an array of all debit objects.
-        for (let i = 0; i < data.length; i++) {
-          //iterates through all debits
-          this.setState({
-            accountBalance: this.state.accountBalance - data[i].amount, //actually debits account balance
-            debitAmount: this.state.debitAmount + data[i].amount, //adds up all debits
-          });
-        }
-        console.log(this.state.debitInfo)
+        this.setState({
+          debitInfo: res.data,  //loads debit info from api into state
+        });
+        res.data.forEach((data) => {  //for each debit,
+          debits += data.amount;      //add the amount to our counter
+        });
+        this.setState({
+          debitAmount: debits,  //sets debit amount in state to the amount of our counter
+        });
       })
       .catch((error) => console.log("Loading debits error" + error));
 
-    // Load in debits:
+    // fetch credits:
+    console.log("fetch credits:");
     axios
       .get("https://moj-api.herokuapp.com/credits")
       .then((res) => {
-        let data = res.data;
-        this.setState({creditInfo: data});  //Sets creditInfo to an array of all credit objects.
-        for (let i = 0; i < data.length; i++) {
-          //iterates through all credits
-          this.setState({
-            accountBalance: this.state.accountBalance + data[i].amount, //actually credits account balance
-            creditAmount: this.state.creditAmount + data[i].amount, //adds up all credits
-          });
-        }
-        console.log(this.state.creditInfo)
+        this.setState({
+          creditInfo: res.data, //loads credit info from api into state
+        });
+        res.data.forEach((data) => {  //for each credit,
+          credits += data.amount;     //add the amount to our counter
+        });
+        this.setState({
+          creditAmount: debits, //sets credit amount in state to the amount of our counter
+        });
       })
-      .catch((error) => console.log("Loading credits error: " + error));
+      .catch((error) => console.log("Loading credits error" + error));
   };
+
+
+  updateDebit(object){
+    this.state.debitInfo.push(object);
+    this.setState({
+      debitAmount: this.state.debitAmount - Number(object.amount)
+    });
+  }
+
+  updateCredit(object){
+    this.state.creditInfo.push(object);
+    this.setState({
+      creditAmount: this.state.creditAmount + Number(object.amount)
+    });
+  }
 
   mockLogIn = (logInInfo) => {
     const newUser = { ...this.state.currentUser };
@@ -69,8 +90,9 @@ class App extends Component {
   };
 
   render() {
+    let totalAccountBalance = this.state.accountBalance + this.state.debitAmount - this.state.creditAmount;
     const HomeComponent = () => (
-      <Home accountBalance={this.state.accountBalance} />
+      <Home accountBalance={totalAccountBalance} />
     );
     const UserProfileComponent = () => (
       <UserProfile
@@ -87,9 +109,10 @@ class App extends Component {
     );
     const DebitsComponent = () => (
       <Debits
-        accountBalance = {this.state.accountBalance}
-        data = {this.state.debitInfo}
-        />
+        accountBalance={totalAccountBalance}
+        updateBalance={this.updateDebit}
+        data={this.state.debitInfo}
+      />
     );
 
     return (
