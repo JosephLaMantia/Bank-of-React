@@ -18,6 +18,7 @@ class App extends Component {
         memberSince: "08/23/99",
         debitInfo: [],
         debitAmount: 0,
+        creditInfo: [],
         creditAmount: 0,
       },
     };
@@ -31,16 +32,15 @@ class App extends Component {
       .get("https://moj-api.herokuapp.com/debits")
       .then((res) => {
         let data = res.data;
+        this.setState({debitInfo: data}); //Sets debitInfo to an array of all debit objects.
         for (let i = 0; i < data.length; i++) {
           //iterates through all debits
-          let tempInfo = [data[i].description, data[i].amount, data[i].date]; //for each debit, create an array storing its data.
           this.setState({
-            debitInfo: [...tempInfo],
             accountBalance: this.state.accountBalance - data[i].amount, //actually debits account balance
             debitAmount: this.state.debitAmount + data[i].amount, //adds up all debits
           });
-          console.log(this.state.debitInfo)
         }
+        console.log(this.state.debitInfo)
       })
       .catch((error) => console.log("Loading debits error" + error));
 
@@ -49,14 +49,15 @@ class App extends Component {
       .get("https://moj-api.herokuapp.com/credits")
       .then((res) => {
         let data = res.data;
+        this.setState({creditInfo: data});  //Sets creditInfo to an array of all credit objects.
         for (let i = 0; i < data.length; i++) {
           //iterates through all credits
-          let tempInfo = [data[i].description, data[i].amount, data[i].date]; //for each credit, create an array storing its data.
           this.setState({
             accountBalance: this.state.accountBalance + data[i].amount, //actually credits account balance
             creditAmount: this.state.creditAmount + data[i].amount, //adds up all credits
           });
         }
+        console.log(this.state.creditInfo)
       })
       .catch((error) => console.log("Loading credits error: " + error));
   };
@@ -85,7 +86,9 @@ class App extends Component {
       />
     );
     const DebitsComponent = () => (
-      <Debits/>
+      <Debits
+        data = {this.state.debitInfo}
+        />
     );
 
     return (
