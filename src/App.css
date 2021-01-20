@@ -1,38 +1,54 @@
-.App {
+html {
+  background-color: #f5f0dc;
+}
+
+
+div.nav-component {
+  display: flex;
+  justify-content: center;
+}
+
+#account-balance-component {
+  display: flex;
+  justify-content: center;
+}
+
+#bank-header {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+h1 {
+  text-align: center;
+  color: #b52b2b;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+h2 {
+  color: #b52b2b;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+div {
+  color: #745b09;
+  text-align: center;
+}
+
+#credits-component{
+ display: flex;
+ flex-direction: column;
+}
+
+#debits-component{
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
+ }
 
-.App-link {
-  color: #61dafb;
-}
+ #user-name{
+  color: #745b09;
+  display: flex;
+  flex-direction: column;
+ }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+ #member-since{
+  color: #745b09;
+  display: flex;
+  flex-direction: column;
+ }

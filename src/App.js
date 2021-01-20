@@ -5,7 +5,9 @@ import UserProfile from "./components/UserProfile";
 import Nav from "./components/Nav";
 import LogIn from "./components/Login";
 import Debits from "./components/Debits";
+import Credits from "./components/Credits";
 import axios from "axios";
+import "./App.css";
 
 class App extends Component {
   constructor() {
@@ -62,21 +64,21 @@ class App extends Component {
           credits += data.amount;     //add the amount to our counter
         });
         this.setState({
-          creditAmount: debits, //sets credit amount in state to the amount of our counter
+          creditAmount: credits, //sets credit amount in state to the amount of our counter
         });
       })
       .catch((error) => console.log("Loading credits error" + error));
   };
 
 
-  updateDebit(object){
+  updateDebit(object){  //adds user-added debit to account
     this.state.debitInfo.push(object);
     this.setState({
-      debitAmount: this.state.debitAmount - Number(object.amount)
+      debitAmount: this.state.debitAmount + Number(object.amount)
     });
   }
 
-  updateCredit(object){
+  updateCredit(object){ //adds user-added credit to account
     this.state.creditInfo.push(object);
     this.setState({
       creditAmount: this.state.creditAmount + Number(object.amount)
@@ -90,7 +92,9 @@ class App extends Component {
   };
 
   render() {
-    let totalAccountBalance = this.state.accountBalance + this.state.debitAmount - this.state.creditAmount;
+    let totalAccountBalance = parseFloat(this.state.accountBalance - this.state.debitAmount + this.state.creditAmount).toFixed(2);
+    
+    console.log(totalAccountBalance);
     const HomeComponent = () => (
       <Home accountBalance={totalAccountBalance} />
     );
@@ -114,15 +118,23 @@ class App extends Component {
         data={this.state.debitInfo}
       />
     );
+    const CreditsComponent = () => (
+      <Credits
+        accountBalance={totalAccountBalance}
+        updateBalance={this.updateCredit}
+        data={this.state.creditInfo}
+      />
+    );
 
     return (
       <Router>
-        <div>
+        <div id="app-body">
           <Nav />
           <Route exact path="/" render={HomeComponent} />
           <Route exact path="/userProfile" render={UserProfileComponent} />
           <Route exact path="/login" render={LogInComponent} />
           <Route exact path="/debits" render={DebitsComponent} />
+          <Route exact path="/credits" render={CreditsComponent} />
         </div>
       </Router>
     );

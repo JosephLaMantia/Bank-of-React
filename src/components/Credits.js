@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import AccountBalance from "./AccountBalance";
 import { Link } from "react-router-dom";
 
-class Debits extends Component {
+class Credits extends Component {
 
     constructor(){
         super();
@@ -16,15 +16,15 @@ class Debits extends Component {
     }
 
     
-    addDescription(e){  //updates the description of the debit that the user is adding.
+    addDescription(e){  //updates the description of the credit that the user is adding.
         this.setState({description: e.target.value});
     }
 
-    addAmount(e){   //updates the amount of the debit that the user is adding.
+    addAmount(e){   //updates the amount of the credit that the user is adding.
         this.setState({amount: e.target.value});
     }
 
-    saveContent(e){  //gets current timestamp and creates object for the new user-added debit
+    saveContent(e){  //gets current timestamp and creates object for the new user-added credit
         e.preventDefault();
         var today = new Date(),
         date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()+"T" 
@@ -42,17 +42,17 @@ class Debits extends Component {
 
 
   render() {
-    console.log("In Debits Component: ")
+    console.log("In Credits Component: ")
     return (
-        <div id="debits-component">
+        <div id = "credits-component">
 
             {/* Display account balance: */}
             <AccountBalance accountBalance={this.props.accountBalance}/>
 
-            {/* Debit page header */}
-            <h1>Debits</h1>
+            {/* Credits page header */}
+            <h1>Credits</h1>
 
-            {/* Display list of debits with info */}
+            {/* Display list of credits with info */}
             <table>
                 <tr>
                 <th>Description</th>
@@ -78,11 +78,11 @@ class Debits extends Component {
 
             <br/>
 
-            {/* Form for user to input a new debit */}
+            {/* Form for user to input a new credit */}
             <form>
-                Add a new debit:<br/>
+                Add a new credit:<br/>
                 <label>Description:<input type="text" onChange={this.addDescription}/></label><br/>
-                <label>Debit Amount:<input type="text" onChange={this.addAmount} /></label><br/>
+                <label>Credit Amount:<input type="text" onChange={this.addAmount} /></label><br/>
                 <input type="submit" onClick={this.saveContent} />
             </form>
 
@@ -92,4 +92,4 @@ class Debits extends Component {
   }
 }
 
-export default Debits;
+export default Credits;
